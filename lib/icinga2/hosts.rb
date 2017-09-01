@@ -120,6 +120,18 @@ module Icinga2
       )
     end
 
+    # currently not working
+    #
+    # The issue still stands and is not an easy one to solve: https://github.com/Icinga/icinga2/issues/4084
+    # hand in hand with https://github.com/Icinga/icinga2/issues/4625
+    #
+    def modify_host( params )
+
+      url = "https://monitoring-portal.org/index.php?thread/40717-update-host-vars-through-api-and-apply-service/&postID=249136#post249136"
+
+      raise( format( 'please read %s for more informaton', ul ) )
+    end
+
     # return hosts
     #
     # @param [Hash] params
