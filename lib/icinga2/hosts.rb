@@ -37,6 +37,7 @@ module Icinga2
     # @option params [String] icon_image_alt
     # @option params [Integer] retry_interval
     # @option params [Bool] volatile
+    # @option params [Bool] reload
     # @option params [Hash] vars ({})
     #
     # @example
@@ -95,6 +96,7 @@ module Icinga2
       templates   = validate( params, required: false, var: 'templates', type: Array ) || [ 'generic-host' ]
       vars   = validate( params, required: false, var: 'vars', type: Hash ) || {}
       zone   = validate( params, required: false, var: 'zone', type: String )
+      reload = validate( params, required: false, var: 'reload', type: Boolean ) || true
 
       address = Socket.gethostbyname( name ).first if( address.nil? )
 
@@ -127,6 +129,7 @@ module Icinga2
           retry_interval: retry_interval,
           volatile: volatile,
           zone: zone,
+          reload : reload,
           vars: vars
         }
       }
@@ -165,13 +168,15 @@ module Icinga2
 
       name    = validate( params, required: true, var: 'name', type: String )
       cascade = validate( params, required: false, var: 'cascade', type: Boolean ) || false
+      reload = validate( params, required: false, var: 'reload', type: Boolean ) || true
 
       url = format( '%s/objects/hosts/%s%s', @icinga_api_url_base, name, cascade.is_a?(TrueClass) ? '?cascade=1' : nil )
 
       delete(
         url: url,
         headers: @headers,
-        options: @options
+        options: @options,
+        reload: reload
       )
     end
 
@@ -208,6 +213,7 @@ module Icinga2
     # @option params [String] icon_image_alt
     # @option params [Integer] retry_interval
     # @option params [Bool] volatile
+    # @option params [Bool] reload
     # @option params [Hash] vars ({})
     # @option params [Bool] merge_vars (false)
     #
